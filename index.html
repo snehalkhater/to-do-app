@@ -66,14 +66,89 @@
   box-shadow: 0 0 0 4px #FFEDFA,
     0 0 0 8px #BE5985;
   }
+  
+  .task-items {
+    background-color: #FFEDFA;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 18px;
+    color: #BE5985;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .delete-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .delete-icon:hover {
+    box-shadow: 0 0 0 4px #FFEDFA,
+    0 0 0 8px #BE5985;
+  }
+
 </style>
 <body>
       <h2> 📝 My To Do List</h2>
-  <div class="container">
-    <div class="input-container">
-      <input type="text" placeholder="Add your new task" class="task-input" >
+  <div class="container" >
+    <div class="input-container" id="todoContainer">
+      <input type="text" placeholder="Add your new task" class="task-input" id="taskInput">
       <button class="add-button">Add List</button>
     </div>
   </div>
+    <script>
+    let todoItems = [];
+    const inputContainer = document.querySelector(".input-container");
+    const parentContainer = document.querySelector(".container");
+    let taskListContainer = document.createElement("div");
+    parentContainer.appendChild(taskListContainer);
+
+    const loadCards = () => {
+      todoItems = JSON.parse(localStorage.getItem("todoItems") || "[]");
+      taskListContainer.innerHTML = ""; // clear only tasks
+
+      for (const todoItem of todoItems) {
+        const taskDiv = document.createElement("div");
+        taskDiv.className = "task-items";
+        taskDiv.innerHTML = `
+        ${todoItem}
+        <img src="./trash.png" alt="delete" class="delete-icon" onclick="deleteToDo('${todoItem}')">
+      `;
+        taskListContainer.appendChild(taskDiv);
+      }
+    };
+
+    const addToDo = () => {
+      const taskInput = document.getElementById("taskInput");
+      const newTodo = taskInput.value;
+      if (newTodo.trim() != "") {
+        todoItems.push(newTodo);
+        taskInput.value = "";
+        localStorage.setItem("todoItems", JSON.stringify(todoItems));
+        loadCards();
+      }
+    };
+
+    const deleteToDo = (task) => {
+      const index = todoItems.indexOf(task);
+      if (index > -1) {
+        todoItems.splice(index, 1);
+        localStorage.setItem("todoItems", JSON.stringify(todoItems));
+        loadCards();
+      }
+    };
+
+    document.querySelector(".add-button").addEventListener("click", addToDo);
+
+    document.getElementById("taskInput").addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        addToDo();
+      }
+    });
+    loadCards();
+  </script>
 </body>
 </html>
