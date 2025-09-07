@@ -27,6 +27,7 @@
     height: 350px;
     background-color: #EC7FA9;
     border-radius: 10px;
+     overflow-y: auto;
   }
 
 .input-container {
@@ -38,6 +39,7 @@
   padding: 15px;
   border-radius: 8px;
   position: relative; 
+ 
 }
  .task-input {
     background-color: #FFEDFA;
@@ -137,7 +139,6 @@
         taskListContainer.appendChild(taskDiv);
       }
     };
-
     const addToDo = () => {
       const taskInput = document.getElementById("taskInput");
       const newTodo = taskInput.value;
@@ -148,7 +149,6 @@
         loadCards();
       }
     };
-
     const deleteToDo = (task) => {
       const index = todoItems.indexOf(task);
       if (index > -1) {
@@ -157,9 +157,7 @@
         loadCards();
       }
     };
-
     document.querySelector(".add-button").addEventListener("click", addToDo);
-
     document.getElementById("taskInput").addEventListener("keyup", (e) => {
       if (e.key === "Enter") {
         addToDo();
